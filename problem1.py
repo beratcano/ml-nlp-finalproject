@@ -1,3 +1,5 @@
+# To be updated
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -16,6 +18,10 @@ df = dfcsv.rename(columns={"Age": "age",
                          "Exercise_Frequency": "exer",
                          "Blood_Pressure": "bp",
                          "Health_Risk": "risk"})
+
+cols = ["age", "bmi", "smoke", "exer", "bp", "risk"]
+num_cols = ["age", "bmi", "bp"]
+cat_cols = ["smoke", "exer", "risk"]
 
 # print(df.info())
 # column - null count - datatype
@@ -40,13 +46,12 @@ df["risk"] = df["risk"].map(risk_mapping)
 
 # Finding missing values with K-Nearest Neighbour Method
 df_kn = df.copy()
-df_kn["bmi"] = KNNImputer(n_neighbors=5).fit_transform(df[["bmi"]])
+df_kn[cols] = KNNImputer(n_neighbors=5).fit_transform(df[cols])
 
 # print(df.info())          // bmi : 3150 data
 # print(df_kn.info())       // bmi : 3500 data
 
 # Standartization of columns with numerical values (not categorical values)
-num_cols = ["age", "bmi", "bp"]
 df_std = df_kn.copy()
 df_std[num_cols] = StandardScaler().fit_transform(df_kn[num_cols])
 
