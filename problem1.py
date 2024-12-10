@@ -19,7 +19,7 @@ df = dfcsv.rename(columns={"Age": "age",
                          "Blood_Pressure": "bp",
                          "Health_Risk": "risk"})
 
-cols = ["age", "bmi", "smoke", "exer", "bp", "risk"]
+columns = ["age", "bmi", "smoke", "exer", "bp", "risk"]
 num_cols = ["age", "bmi", "bp"]
 cat_cols = ["smoke", "exer", "risk"]
 
@@ -46,7 +46,7 @@ df["risk"] = df["risk"].map(risk_mapping)
 
 # Finding missing values with K-Nearest Neighbour Method
 df_kn = df.copy()
-df_kn[cols] = KNNImputer(n_neighbors=5).fit_transform(df[cols])
+df_kn[columns] = KNNImputer(n_neighbors=5).fit_transform(df[columns])
 
 # print(df.info())          // bmi : 3150 data
 # print(df_kn.info())       // bmi : 3500 data
