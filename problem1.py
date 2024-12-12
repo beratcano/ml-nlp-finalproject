@@ -6,6 +6,9 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, ConfusionMatrixDisplay
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
 
 dfcsv = pd.read_csv("csv/Customer_Health_Profile.csv")
 dfcsv.index = dfcsv.index+1
@@ -50,6 +53,44 @@ df_std[num_cols] = StandardScaler().fit_transform(df_kn[num_cols])
 x = df_std[["age", "bmi", "smoke", "exer", "bp"]]
 y = df_std["risk"]
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, stratify=y, random_state=42)
+
+results = {}
+models = {
+    "Random Forest": RandomForestClassifier(random_state=42),
+    "Logistic Regression": LogisticRegression(random_state=42),
+    "Support Vector Machine": SVC(random_state=42),
+    "K-Nearest Neighbors": KNeighborsClassifier()
+}
+
+for model_name, model in models.items():
+    model.fit(x_train, y_train)
+    y_pred = model.predict(x_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    classification_rep = classification_report(y_test, y_pred, output_dict=True)
+    results[model_name] = {
+        "Accuracy": accuracy,
+        "Classification Report": classification_rep,
+        "Predictions": y_pred
+    }
+
+for model_name, result in results.items():
+    print(f"{model_name} Model:")
+    print(f"Accuracy: {result['Accuracy']*100:.2f}%")
+    print(f"Classification Report:\n{result['Classification Report']}")
+    print("="*50)
+    cm = confusion_matrix(y_test, result["Predictions"])
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Low", "Medium", "High"])
+    disp.plot(cmap='Blues')
+    plt.title(f"Confusion Matrix for {model_name}")
+    plt.show()
+
+# ACCURACY SCORES #
+# Random Forest: 34.10%
+# Logistic Regression: 33.52%
+# Support Vector Machine: 31.52%
+# K_Nearest Neighbors: 32.76%
+
+## We will use Random Forest Classifier model in this task.
 
 model = RandomForestClassifier(random_state=42)
 model.fit(x_train, y_train)
