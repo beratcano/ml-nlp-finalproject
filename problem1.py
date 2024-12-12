@@ -151,6 +151,7 @@ plt.xticks(ticks=[0, 1, 2], labels=['Low', 'Moderate', 'High'], fontsize=10)
 plt.tight_layout()
 plt.show()
 
+# Confusion Matrix
 cm = confusion_matrix(y_test, y_pred)
 disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Low", "Medium", "High"])
 disp.plot(cmap='Blues')
