@@ -1,5 +1,4 @@
 # To be updated
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -8,7 +7,7 @@ from sklearn.impute import KNNImputer
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.metrics import accuracy_score, classification_report
 
 dfcsv = pd.read_csv("csv/Customer_Health_Profile.csv")
 dfcsv.index = dfcsv.index+1
@@ -101,8 +100,8 @@ for i, p in enumerate(ax1.patches):
     count = smoke_risk_counts.values[row, col]
     if percent > 0:  # Avoid annotating zero values
         ax1.text(
-            p.get_x() + p.get_width() / 2,
-            p.get_y() + p.get_height() / 2,
+            p.get_x() + p.get_width() / 2,          # type: ignore
+            p.get_y() + p.get_height() / 2,         # type: ignore
             f'{count}\n({percent:.1f}%)',
             ha='center', va='center', fontsize=9, color='black'
         )
@@ -122,14 +121,14 @@ exer_bars = exer_risk_percentage.plot(kind='bar', stacked=True, ax=ax2, colormap
 
 # Annotate Bars for Exercise Frequency
 for i, p in enumerate(ax2.patches):
-    row = i // len(exer_risk_counts.columns)  # Row index (exercise category)
-    col = i % len(exer_risk_counts.columns)  # Column index (risk category)
+    row = i // len(exer_risk_counts.columns)        # Row index (exercise category)
+    col = i % len(exer_risk_counts.columns)         # Column index (risk category)
     percent = exer_risk_percentage.values[row, col]
     count = exer_risk_counts.values[row, col]
     if percent > 0:  # Avoid annotating zero values
         ax2.text(
-            p.get_x() + p.get_width() / 2,
-            p.get_y() + p.get_height() / 2,
+            p.get_x() + p.get_width() / 2,          # type: ignore
+            p.get_y() + p.get_height() / 2,         # type: ignore
             f'{count}\n({percent:.1f}%)',
             ha='center', va='center', fontsize=9, color='black'
         )
