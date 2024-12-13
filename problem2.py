@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
 from sklearn.impute import KNNImputer
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
@@ -20,15 +19,15 @@ columns = ["dur", "view", "amount", "brate"]
 # print(df.info())
 # column - null count - datatype
 # dur - 0 - float64
-# view - 600 - float64      // Need to handle missing values in this column
+# view - 600 - float64              // Need to handle missing values in this column
 # amount - 0 - float64
 # brate - 0 - float64
 
 df_kn = df.copy()
 df_kn[columns] = KNNImputer(n_neighbors=5).fit_transform(df[columns])
 
-print(df.info())         # // view : 5400 data
-print(df_kn.info())      # // view : 6000 data
+print(df.info())                    # // view : 5400 data
+print(df_kn.info())                 # // view : 6000 data
 
 df_std = df_kn.copy()
 df_std = StandardScaler().fit_transform(df_std[columns])
@@ -37,9 +36,9 @@ wcss = []
 for k in range(1, 11):
     kmeans = KMeans(n_clusters=k, random_state=42)
     kmeans.fit(df_std)
-    wcss.append(kmeans.inertia_)  # WCSS (inertia) for the current k
+    wcss.append(kmeans.inertia_)
 
-# print(wcss)
+print(wcss)
 # OUTPUT:
 # 24000.0, 19514.238279859466, 
 # 16744.673090000808, 14566.596130299149, 
@@ -59,16 +58,17 @@ print(wdiff)
 # 1222.1909844791462, 1151.7356595590045,
 # 1081.9471726022675, 496.46304425884773, 532.3791323188889
 
-# ELBOW METHOD VISUALIZATION #
-# plt.figure(figsize=(8, 5))
-# plt.plot(range(1, 11), wcss, marker='o', linestyle='--')
-# plt.title('Elbow Method: Optimal k', fontsize=14)
-# plt.xlabel('Number of Clusters (k)', fontsize=12)
-# plt.ylabel('WCSS', fontsize=12)
-# plt.xticks(range(1, 11))
-# plt.grid()
-# plt.show()
+# Elbow Method
+plt.figure(figsize=(8, 5))
+plt.plot(range(1, 11), wcss, marker='o', linestyle='--')
+plt.title('Elbow Method: Optimal k', fontsize=14)
+plt.xlabel('Number of Clusters (k)', fontsize=12)
+plt.ylabel('WCSS', fontsize=12)
+plt.xticks(range(1, 11))
+plt.grid()
+plt.show()
 
+# K Means Plot
 kmeans = KMeans(n_clusters=5, random_state=42)
 df_kn["KN-Cluster"] = kmeans.fit_predict(df_std)
 print(df_kn["KN-Cluster"].value_counts())
@@ -76,6 +76,7 @@ cluster_summary = df_kn.groupby("KN-Cluster").mean()
 print(cluster_summary)
 print(df_kn.head())
 
+# DBSCAN Plot
 pca = PCA(n_components=2)
 df_pca = pca.fit_transform(df_std)
 plt.scatter(df_pca[:, 0], df_pca[:, 1], c=df_kn["KN-Cluster"], cmap="viridis", alpha=0.7)
