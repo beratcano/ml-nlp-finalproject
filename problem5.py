@@ -149,11 +149,10 @@ df["similarity_tfidf"] = similarities_tfidf.flatten()
 top_similar_movies_tfidf = df.sort_values("similarity_tfidf", ascending=False)[1:11]
 print(top_similar_movies_tfidf[["title", "similarity_tfidf"]])
 
-
 top_movies = top_similar_movies_tfidf
 plt.barh(top_movies["title"], top_movies["similarity_tfidf"], color="blue")
 plt.xlabel("Similarity Score")
 plt.title("Top 10 Movies Similar to Spider-Man")
-plt.gca().invert_yaxis()  # Invert y-axis for better readability
+plt.gca().invert_yaxis()
 plt.tight_layout()
 plt.show()
